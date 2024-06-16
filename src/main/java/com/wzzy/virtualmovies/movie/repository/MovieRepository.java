@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class MovieRepository {
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -18,12 +17,11 @@ public class MovieRepository {
     }
 
     public Movie save(Movie movie) {
-        entityManager.getTransaction().begin();
         if (movie.getId() == null) {
-            movie.setId(UUID.randomUUID());
+            entityManager.persist(movie);
+        } else {
+            movie = entityManager.merge(movie);
         }
-        entityManager.persist(movie);
-        entityManager.getTransaction().commit();
         return movie;
     }
 
@@ -35,13 +33,17 @@ public class MovieRepository {
         return entityManager.createQuery("SELECT m FROM Movie m", Movie.class).getResultList();
     }
 
+    public List<Movie> findByTitulo(String titulo) {
+        TypedQuery<Movie> query = entityManager.createQuery("SELECT m FROM Movie m WHERE m.titulo = :titulo", Movie.class);
+        query.setParameter("titulo", titulo);
+        return query.getResultList();
+    }
+
     public void delete(Movie movie) {
-        entityManager.getTransaction().begin();
         if (entityManager.contains(movie)) {
             entityManager.remove(movie);
         } else {
             entityManager.remove(entityManager.merge(movie));
         }
-        entityManager.getTransaction().commit();
     }
 }

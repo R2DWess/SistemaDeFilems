@@ -24,6 +24,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.wzzy.virtualmovies.movie.Movie;
+import com.wzzy.virtualmovies.movie.service.MoviesService;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
 
 public class MoviesHandler implements HttpHandler {
     private MoviesService moviesService;
@@ -55,12 +67,18 @@ public class MoviesHandler implements HttpHandler {
     }
 
     private void handleGet(HttpExchange exchange, String path) throws IOException {
+        String[] pathParts = path.split("/");
         if ("/movies".equals(path)) {
             List<Movie> movies = moviesService.findAll();
             String jsonResponse = gson.toJson(movies);
             sendResponse(exchange, 200, jsonResponse);
+        } else if (pathParts.length == 3 && pathParts[2].equals("titulo")) {
+            String titulo = pathParts[3];
+            List<Movie> movies = moviesService.findByTitulo(titulo);
+            String jsonResponse = gson.toJson(movies);
+            sendResponse(exchange, 200, jsonResponse);
         } else if (path.matches("/movies/\\w+")) {
-            UUID id = UUID.fromString(path.split("/")[2]);
+            UUID id = UUID.fromString(pathParts[2]);
             Movie movie = moviesService.findById(id);
             if (movie != null) {
                 sendResponse(exchange, 200, gson.toJson(movie));
@@ -73,7 +91,6 @@ public class MoviesHandler implements HttpHandler {
     private void handlePost(HttpExchange exchange) throws IOException {
         InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
         Movie movie = gson.fromJson(reader, Movie.class);
-        movie.setId(UUID.randomUUID());
         movie = moviesService.save(movie);
         sendResponse(exchange, 201, gson.toJson(movie));
     }

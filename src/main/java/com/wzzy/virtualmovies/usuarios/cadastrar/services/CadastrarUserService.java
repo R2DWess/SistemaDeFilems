@@ -1,71 +1,66 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.services;
 
-import com.wzzy.virtualmovies.database.DatabaseUtil;
+import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
-import com.wzzy.virtualmovies.usuarios.cadastrar.repository.CadastrarUserRepository;
 
-
-import java.sql.*;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class CadastrarUserService {
 
-    private final Map<UUID, CadastrarUserModel> users = new ConcurrentHashMap<>();
+    private EntityManager em;
 
-    public CadastrarUserModel save(CadastrarUserModel cadastrarUserModel) {
-        if (cadastrarUserModel.getId() == null) {
-            cadastrarUserModel.setId(UUID.fromString(UUID.randomUUID().toString()));
-        }
-        users.put(UUID.fromString(cadastrarUserModel.getId().toString()), cadastrarUserModel);
-        return cadastrarUserModel;
+    public CadastrarUserService(EntityManager em) {
+        this.em = em;
     }
 
     public List<CadastrarUserModel> findAll() {
-        return new ArrayList<>(users.values());
+        TypedQuery<CadastrarUserModel> query = em.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class);
+        return query.getResultList();
     }
 
     public Optional<CadastrarUserModel> findById(UUID id) {
-        return Optional.ofNullable(users.get(id));
+        return Optional.ofNullable(em.find(CadastrarUserModel.class, id));
     }
 
-    public boolean existsByEmail(String email) {
-        return users.values().stream().anyMatch(user -> email.equals(user.getEmail()));
-    }
-
-    public boolean existsByCpf(String cpf) {
-        return users.values().stream().anyMatch(user -> cpf.equals(user.getCpf()));
-    }
-
-    public boolean existsBySocialname(String socialname) {
-        return users.values().stream().anyMatch(user -> socialname.equals(user.getSocialname()));
-    }
-
-    public void delete(CadastrarUserModel userModel) {
-        users.remove(userModel.getId().toString());
-    }
-
-    public Optional<CadastrarUserModel> findBySocialname(String socialname) {
-        return users.values().stream()
-                .filter(user -> socialname.equals(user.getSocialname()))
-                .findFirst();
+    public CadastrarUserModel save(CadastrarUserModel user) {
+        em.getTransaction().begin();
+        if (user.getId() == null) {
+            user.setId(UUID.randomUUID());
+            em.persist(user);
+        } else {
+            em.merge(user);
+        }
+        em.getTransaction().commit();
+        return user;
     }
 
     public boolean deleteById(UUID id) {
-        return users.remove(id) != null; // Retorna true se um usuário foi realmente removido
-    }
-
-    public boolean cadastrarUser(CadastrarUserModel newUser) {
-        if (!existsByEmail(newUser.getEmail()) && !existsByCpf(newUser.getCpf())) {
-            newUser.setId(UUID.fromString(UUID.randomUUID().toString())); // Assegura que o novo usuário tenha um ID único
-            save(newUser);
+        em.getTransaction().begin();
+        CadastrarUserModel user = em.find(CadastrarUserModel.class, id);
+        if (user != null) {
+            em.remove(user);
+            em.getTransaction().commit();
             return true;
         }
+        em.getTransaction().rollback();
+        return false;
+    }
+
+    public boolean addFavoriteMovie(UUID userId, UUID movieId) {
+        em.getTransaction().begin();
+        CadastrarUserModel user = em.find(CadastrarUserModel.class, userId);
+        Movie movie = em.find(Movie.class, movieId);
+        if (user != null && movie != null) {
+            user.getFavoriteMovies().add(movie);
+            em.merge(user);
+            em.getTransaction().commit();
+            return true;
+        }
+        em.getTransaction().rollback();
         return false;
     }
 }
-

@@ -24,7 +24,7 @@ public class MoviesService {
         if (movie.getId() == null) {
             movie.setId(UUID.randomUUID());
         }
-        movie = entityManager.merge(movie); // Use merge instead of persist
+        movie = entityManager.merge(movie);
         entityManager.getTransaction().commit();
         return movie;
     }
@@ -35,6 +35,10 @@ public class MoviesService {
 
     public Movie findById(UUID id) {
         return movieRepository.findById(id);
+    }
+
+    public List<Movie> findByTitulo(String titulo) {
+        return movieRepository.findByTitulo(titulo);
     }
 
     public boolean deleteById(UUID id) {

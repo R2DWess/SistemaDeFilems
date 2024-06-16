@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -15,8 +16,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class CadastrarUserHandler implements HttpHandler {
-    private CadastrarUserService userService = new CadastrarUserService(); // Implemente essa classe conforme sua lógica de negócios
+    private CadastrarUserService userService;
     private Gson gson = new Gson();
+
+    public CadastrarUserHandler(EntityManager em) {
+        this.userService = new CadastrarUserService(em);
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -24,18 +29,22 @@ public class CadastrarUserHandler implements HttpHandler {
         String path = exchange.getRequestURI().getPath();
 
         try {
-            switch (method) {
-                case "GET":
-                    handleGet(exchange, path);
-                    break;
-                case "POST":
-                    handlePost(exchange, path);
-                    break;
-                case "DELETE":
-                    handleDelete(exchange, path);
-                    break;
-                default:
-                    sendResponse(exchange, 405, "Method Not Allowed");
+            if ("POST".equals(method) && path.matches("/users/\\w+/favorites/\\w+")) {
+                handleAddFavorite(exchange, path);
+            } else {
+                switch (method) {
+                    case "GET":
+                        handleGet(exchange, path);
+                        break;
+                    case "POST":
+                        handlePost(exchange, path);
+                        break;
+                    case "DELETE":
+                        handleDelete(exchange, path);
+                        break;
+                    default:
+                        sendResponse(exchange, 405, "Method Not Allowed");
+                }
             }
         } catch (Exception e) {
             sendResponse(exchange, 500, "Internal Server Error");
@@ -49,8 +58,8 @@ public class CadastrarUserHandler implements HttpHandler {
         } else if (path.matches("/users/\\w+")) {
             UUID id = UUID.fromString(path.split("/")[2]);
             Optional<CadastrarUserModel> user = userService.findById(id);
-            if (user != null) {
-                sendResponse(exchange, 200, gson.toJson(user));
+            if (user.isPresent()) {
+                sendResponse(exchange, 200, gson.toJson(user.get()));
             } else {
                 sendResponse(exchange, 404, "User Not Found");
             }
@@ -66,18 +75,29 @@ public class CadastrarUserHandler implements HttpHandler {
         }
     }
 
-    private void handleDelete(HttpExchange exchange, String path) throws IOException {
-        if (path.matches("/users/\\w+")) {
-            UUID id = UUID.fromString(path.split("/")[2]); // Extrai o UUID do path
-            boolean success = userService.deleteById(id); // Chama deleteById para tentar remover o usuário
-            if (success) {
-                sendResponse(exchange, 204, ""); // 204 No Content: O usuário foi deletado com sucesso
-            } else {
-                sendResponse(exchange, 404, "User Not Found"); // 404 Not Found: O usuário não foi encontrado
-            }
+    private void handleAddFavorite(HttpExchange exchange, String path) throws IOException {
+        String[] pathParts = path.split("/");
+        UUID userId = UUID.fromString(pathParts[2]);
+        UUID movieId = UUID.fromString(pathParts[4]);
+        boolean success = userService.addFavoriteMovie(userId, movieId);
+        if (success) {
+            sendResponse(exchange, 204, "");
+        } else {
+            sendResponse(exchange, 404, "User or Movie Not Found");
         }
     }
 
+    private void handleDelete(HttpExchange exchange, String path) throws IOException {
+        if (path.matches("/users/\\w+")) {
+            UUID id = UUID.fromString(path.split("/")[2]);
+            boolean success = userService.deleteById(id);
+            if (success) {
+                sendResponse(exchange, 204, "");
+            } else {
+                sendResponse(exchange, 404, "User Not Found");
+            }
+        }
+    }
 
     private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
         exchange.getResponseHeaders().set("Content-Type", "application/json");
