@@ -18,11 +18,12 @@ public class MovieRepository {
     }
 
     public Movie save(Movie movie) {
+        entityManager.getTransaction().begin();
         if (movie.getId() == null) {
-            entityManager.persist(movie);
-        } else {
-            movie = entityManager.merge(movie);
+            movie.setId(UUID.randomUUID());
         }
+        entityManager.persist(movie);
+        entityManager.getTransaction().commit();
         return movie;
     }
 
@@ -35,10 +36,12 @@ public class MovieRepository {
     }
 
     public void delete(Movie movie) {
+        entityManager.getTransaction().begin();
         if (entityManager.contains(movie)) {
             entityManager.remove(movie);
         } else {
             entityManager.remove(entityManager.merge(movie));
         }
+        entityManager.getTransaction().commit();
     }
 }

@@ -37,7 +37,6 @@ public class Movie {
     private String videoUrl;
     private String category;
 
-
     public Movie() {
     }
 

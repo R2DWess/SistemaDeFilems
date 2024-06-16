@@ -4,24 +4,30 @@ import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.movie.repository.MovieRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.UUID;
 
 public class MoviesService {
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private MovieRepository movieRepository;
 
     public MoviesService(EntityManager em) {
+        this.entityManager = em;
         this.movieRepository = new MovieRepository(em);
     }
 
     public Movie save(Movie movie) {
+        entityManager.getTransaction().begin();
         if (movie.getId() == null) {
-            movie.setId(UUID.fromString(UUID.randomUUID().toString()));
+            movie.setId(UUID.randomUUID());
         }
-        return movieRepository.save(movie);
+        movie = entityManager.merge(movie); // Use merge instead of persist
+        entityManager.getTransaction().commit();
+        return movie;
     }
-
 
     public List<Movie> findAll() {
         return movieRepository.findAll();

@@ -12,6 +12,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import com.google.gson.Gson;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.wzzy.virtualmovies.movie.Movie;
+import com.wzzy.virtualmovies.movie.service.MoviesService;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
 
 public class MoviesHandler implements HttpHandler {
     private MoviesService moviesService;
@@ -37,11 +49,10 @@ public class MoviesHandler implements HttpHandler {
                 sendResponse(exchange, 404, "Not Found");
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Adicione esta linha para logar a exceção
-            sendResponse(exchange, 500, "Internal Server Error: " + e.getMessage());
+            e.printStackTrace();
+            sendResponse(exchange, 500, "Internal Server Error");
         }
     }
-
 
     private void handleGet(HttpExchange exchange, String path) throws IOException {
         if ("/movies".equals(path)) {
@@ -62,6 +73,7 @@ public class MoviesHandler implements HttpHandler {
     private void handlePost(HttpExchange exchange) throws IOException {
         InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
         Movie movie = gson.fromJson(reader, Movie.class);
+        movie.setId(UUID.randomUUID());
         movie = moviesService.save(movie);
         sendResponse(exchange, 201, gson.toJson(movie));
     }
@@ -83,5 +95,4 @@ public class MoviesHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
-
 }
