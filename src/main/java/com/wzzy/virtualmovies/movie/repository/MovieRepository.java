@@ -1,6 +1,7 @@
 package com.wzzy.virtualmovies.movie.repository;
 
 import com.wzzy.virtualmovies.movie.Movie;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -13,6 +14,7 @@ public class MovieRepository {
     private EntityManager entityManager;
 
     public MovieRepository(EntityManager em) {
+        this.entityManager = em;
     }
 
     public Movie save(Movie movie) {
