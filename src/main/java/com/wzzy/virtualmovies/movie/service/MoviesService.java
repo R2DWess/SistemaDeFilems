@@ -3,74 +3,83 @@ package com.wzzy.virtualmovies.movie.service;
 import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.movie.repository.MovieRepository;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
-import com.wzzy.virtualmovies.usuarios.cadastrar.repository.CadastrarUserRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.persistence.EntityManager;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Service
 public class MoviesService {
 
-    final MovieRepository movieRepository;
-    final CadastrarUserRepository userRepository;
+    private MovieRepository movieRepository;
 
-    public MoviesService(MovieRepository movieRepository, CadastrarUserRepository userRepository) {
-        this.movieRepository = movieRepository;
-        this.userRepository = userRepository;
+    public MoviesService(EntityManager em) {
+        this.movieRepository = new MovieRepository(em);
     }
 
+    private final Map<UUID, Movie> movies = new ConcurrentHashMap<>();
+    private final Map<UUID, CadastrarUserModel> users = new ConcurrentHashMap<>();
+
     public List<String> findAllGenres() {
-        return movieRepository.findAll()
-                .stream()
+        return movies.values().stream()
+                // Esse trecho
                 .flatMap(movie -> movie.getGenero().stream())
                 .distinct()
                 .collect(Collectors.toList());
     }
 
+
     public Movie save(Movie movie) {
-        return movieRepository.save(movie);
+        if (movie.getId() == null) {
+            movie.setId(UUID.randomUUID().toString());
+        }
+        movies.put(UUID.fromString(movie.getId()), movie);
+        return movie;
     }
 
     public List<Movie> findAll() {
-        return movieRepository.findAll();
+        return new ArrayList<>(movies.values());
     }
 
     public Movie findById(UUID id) {
-        return movieRepository.findById(id).orElse(null);
+        return movies.get(id);
     }
 
-    public void deleteById(UUID id) {
-        movieRepository.deleteById(id);
+    public boolean deleteById(UUID id) {
+        movies.remove(id);
+        return false;
     }
 
-    @Transactional
     public void deleteByTitulo(String titulo) {
-        movieRepository.deleteByTitulo(titulo);
+        movies.values().removeIf(movie -> titulo.equals(movie.getTitulo()));
     }
 
     public Movie favoriteMovie(String socialName, String titulo) {
-        CadastrarUserModel user = userRepository.findBySocialname(socialName).orElse(null);
-        Movie movie = movieRepository.findByTitulo(titulo).stream().findFirst().orElse(null);
-        if (user != null && movie != null) {
-            user.getFavoriteMovies().add(movie);
-            userRepository.save(user);
-            return movie;
+        Optional<CadastrarUserModel> userOptional = users.values().stream()
+                .filter(user -> socialName.equals(user.getSocialname()))
+                .findFirst();
+        if (userOptional.isPresent()) {
+            CadastrarUserModel user = userOptional.get();
+            Optional<Movie> movieOptional = movies.values().stream()
+                    .filter(movie -> titulo.equals(movie.getTitulo()))
+                    .findFirst();
+            if (movieOptional.isPresent()) {
+                Movie movie = movieOptional.get();
+                user.getFavoriteMovies().add(movie);
+                return movie;
+            }
         }
         return null;
     }
 
     public Movie addMovieToList(UUID movieId, UUID userId) {
         Movie movie = findById(movieId);
-        CadastrarUserModel user = userRepository.findById(userId).orElse(null);
+        CadastrarUserModel user = users.get(userId);
         if (movie != null && user != null) {
             user.getMovieList().add(movie);
-            userRepository.save(user);
+            return movie;
         }
-        return movie;
+        return null;
     }
 
     public String getMovieVideoUrl(UUID id) {
@@ -82,14 +91,17 @@ public class MoviesService {
     }
 
     public boolean favoriteMovieBySocialNameAndTitle(String socialName, String titulo) {
-        Optional<CadastrarUserModel> userOptional = userRepository.findBySocialname(socialName);
+        Optional<CadastrarUserModel> userOptional = users.values().stream()
+                .filter(user -> socialName.equals(user.getSocialname()))
+                .findFirst();
         if (userOptional.isPresent()) {
             CadastrarUserModel user = userOptional.get();
-            List<Movie> movies = movieRepository.findByTitulo(titulo);
-            if (!movies.isEmpty()) {
-                Movie movie = movies.get(0);
+            Optional<Movie> movieOptional = movies.values().stream()
+                    .filter(movie -> titulo.equals(movie.getTitulo()))
+                    .findFirst();
+            if (movieOptional.isPresent()) {
+                Movie movie = movieOptional.get();
                 user.getFavoriteMovies().add(movie);
-                userRepository.save(user);
                 return true;
             }
         }
@@ -97,14 +109,18 @@ public class MoviesService {
     }
 
     public List<Movie> findByCategory(String category) {
-        return movieRepository.findByCategory(category);
+        return movies.values().stream()
+                .filter(movie -> movie.getGenero().contains(category))
+                .collect(Collectors.toList());
     }
 
     public List<Movie> findByTitulo(String titulo) {
-        return movieRepository.findByTitulo(titulo);
+        return movies.values().stream()
+                .filter(movie -> titulo.equals(movie.getTitulo()))
+                .collect(Collectors.toList());
     }
 
     public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+        return new ArrayList<>(movies.values());
     }
 }

@@ -1,71 +1,71 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.services;
 
+import com.wzzy.virtualmovies.database.DatabaseUtil;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 import com.wzzy.virtualmovies.usuarios.cadastrar.repository.CadastrarUserRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+
+import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Service
 public class CadastrarUserService {
 
-    final
-    CadastrarUserRepository cadastrarUserRepository;
+    private final Map<UUID, CadastrarUserModel> users = new ConcurrentHashMap<>();
 
-    public CadastrarUserService(CadastrarUserRepository cadastrarUserRepository){
-        this.cadastrarUserRepository = cadastrarUserRepository;
-    }
-
-    @Transactional
     public CadastrarUserModel save(CadastrarUserModel cadastrarUserModel) {
-        return cadastrarUserRepository.save(cadastrarUserModel);
+        if (cadastrarUserModel.getId() == null) {
+            cadastrarUserModel.setId(UUID.fromString(UUID.randomUUID().toString()));
+        }
+        users.put(UUID.fromString(cadastrarUserModel.getId().toString()), cadastrarUserModel);
+        return cadastrarUserModel;
     }
 
-    public boolean existsByCpf(String cpf){
-        return cadastrarUserRepository.existsByCpf(cpf);
-    }
     public List<CadastrarUserModel> findAll() {
-        return cadastrarUserRepository.findAll();
+        return new ArrayList<>(users.values());
     }
 
     public Optional<CadastrarUserModel> findById(UUID id) {
-        return cadastrarUserRepository.findById(id);
+        return Optional.ofNullable(users.get(id));
     }
 
-    public boolean existsByEmail(String email){
-        return cadastrarUserRepository.existsByEmail(email);
+    public boolean existsByEmail(String email) {
+        return users.values().stream().anyMatch(user -> email.equals(user.getEmail()));
     }
 
-    public boolean existsBySocialname(String socialname){
-        return cadastrarUserRepository.existsBySocialname(socialname);
+    public boolean existsByCpf(String cpf) {
+        return users.values().stream().anyMatch(user -> cpf.equals(user.getCpf()));
     }
-    @Transactional
+
+    public boolean existsBySocialname(String socialname) {
+        return users.values().stream().anyMatch(user -> socialname.equals(user.getSocialname()));
+    }
+
     public void delete(CadastrarUserModel userModel) {
-        cadastrarUserRepository.delete(userModel);
+        users.remove(userModel.getId().toString());
     }
 
     public Optional<CadastrarUserModel> findBySocialname(String socialname) {
-        return cadastrarUserRepository.findBySocialname(socialname);
+        return users.values().stream()
+                .filter(user -> socialname.equals(user.getSocialname()))
+                .findFirst();
     }
 
-    @Transactional
+    public boolean deleteById(UUID id) {
+        return users.remove(id) != null; // Retorna true se um usuário foi realmente removido
+    }
+
     public boolean cadastrarUser(CadastrarUserModel newUser) {
         if (!existsByEmail(newUser.getEmail()) && !existsByCpf(newUser.getCpf())) {
-            CadastrarUserModel cadastrarUserModel = new CadastrarUserModel();
-            BeanUtils.copyProperties(newUser, cadastrarUserModel);
-            cadastrarUserModel.setIsAdmin(newUser.isAdmin());
-            try {
-                save(cadastrarUserModel);
-                return true;
-            } catch (Exception e) {
-                throw new RuntimeException("Erro ao cadastrar usuário", e);
-            }
+            newUser.setId(UUID.fromString(UUID.randomUUID().toString())); // Assegura que o novo usuário tenha um ID único
+            save(newUser);
+            return true;
         }
         return false;
     }
-
 }
+

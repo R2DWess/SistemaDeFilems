@@ -1,13 +1,12 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.model;
 
 import com.wzzy.virtualmovies.movie.Movie;
-import jakarta.persistence.*;
-import lombok.Data;
 
+import java.util.UUID;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-
 
 @Entity
 @Table(name = "TB_USERS_STREAM")
@@ -16,8 +15,8 @@ public class CadastrarUserModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @Column(name = "id", updatable = false, nullable = false, length = 36)
+    private UUID id;
 
     @Column(nullable = false, length = 255)
     private String cpf;
@@ -52,11 +51,29 @@ public class CadastrarUserModel implements Serializable {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    public String getId() {
+    public CadastrarUserModel() {
+    }
+
+    public CadastrarUserModel(UUID id, String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
+        this.id = id;
+        this.cpf = cpf;
+        this.fullname = fullname;
+        this.socialname = socialname;
+        this.birthdate = birthdate;
+        this.rg = rg;
+        this.cellphone = cellphone;
+        this.email = email;
+        this.password = password;
+        this.movieList = movieList;
+        this.favoriteMovies = favoriteMovies;
+        this.isAdmin = isAdmin;
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
