@@ -1,66 +1,51 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.services;
 
-import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class CadastrarUserService {
 
-    private EntityManager em;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public CadastrarUserService(EntityManager em) {
-        this.em = em;
-    }
-
-    public List<CadastrarUserModel> findAll() {
-        TypedQuery<CadastrarUserModel> query = em.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class);
-        return query.getResultList();
-    }
-
-    public Optional<CadastrarUserModel> findById(UUID id) {
-        return Optional.ofNullable(em.find(CadastrarUserModel.class, id));
+    public CadastrarUserService(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     public CadastrarUserModel save(CadastrarUserModel user) {
-        em.getTransaction().begin();
+        entityManager.getTransaction().begin();
         if (user.getId() == null) {
             user.setId(UUID.randomUUID());
-            em.persist(user);
+            entityManager.persist(user);
         } else {
-            em.merge(user);
+            user = entityManager.merge(user);
         }
-        em.getTransaction().commit();
+        entityManager.getTransaction().commit();
         return user;
     }
 
-    public boolean deleteById(UUID id) {
-        em.getTransaction().begin();
-        CadastrarUserModel user = em.find(CadastrarUserModel.class, id);
-        if (user != null) {
-            em.remove(user);
-            em.getTransaction().commit();
-            return true;
-        }
-        em.getTransaction().rollback();
-        return false;
+    public List<CadastrarUserModel> findAll() {
+        return entityManager.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class).getResultList();
     }
 
-    public boolean addFavoriteMovie(UUID userId, UUID movieId) {
-        em.getTransaction().begin();
-        CadastrarUserModel user = em.find(CadastrarUserModel.class, userId);
-        Movie movie = em.find(Movie.class, movieId);
-        if (user != null && movie != null) {
-            user.getFavoriteMovies().add(movie);
-            em.merge(user);
-            em.getTransaction().commit();
+    public Optional<CadastrarUserModel> findById(UUID id) {
+        CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, id);
+        return user != null ? Optional.of(user) : Optional.empty();
+    }
+
+    public boolean deleteById(UUID id) {
+        CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, id);
+        if (user != null) {
+            entityManager.getTransaction().begin();
+            entityManager.remove(user);
+            entityManager.getTransaction().commit();
             return true;
         }
-        em.getTransaction().rollback();
         return false;
     }
 }

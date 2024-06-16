@@ -1,26 +1,29 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
+import com.wzzy.virtualmovies.usuarios.util.LocalDateAdapter;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class CadastrarUserHandler implements HttpHandler {
     private CadastrarUserService userService;
-    private Gson gson = new Gson();
+    private Gson gson;
 
-    public CadastrarUserHandler(EntityManager em) {
-        this.userService = new CadastrarUserService(em);
+    public CadastrarUserHandler(CadastrarUserService userService) {
+        this.userService = userService;
+        this.gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateAdapter()).create();
     }
 
     @Override
@@ -29,40 +32,21 @@ public class CadastrarUserHandler implements HttpHandler {
         String path = exchange.getRequestURI().getPath();
 
         try {
-            if ("POST".equals(method) && path.matches("/users/\\w+/favorites/\\w+")) {
-                handleAddFavorite(exchange, path);
-            } else {
-                switch (method) {
-                    case "GET":
-                        handleGet(exchange, path);
-                        break;
-                    case "POST":
-                        handlePost(exchange, path);
-                        break;
-                    case "DELETE":
-                        handleDelete(exchange, path);
-                        break;
-                    default:
-                        sendResponse(exchange, 405, "Method Not Allowed");
-                }
+            switch (method) {
+                case "GET":
+                    handleGet(exchange, path);
+                    break;
+                case "POST":
+                    handlePost(exchange, path);
+                    break;
+                case "DELETE":
+                    handleDelete(exchange, path);
+                    break;
+                default:
+                    sendResponse(exchange, 405, "Method Not Allowed");
             }
         } catch (Exception e) {
             sendResponse(exchange, 500, "Internal Server Error");
-        }
-    }
-
-    private void handleGet(HttpExchange exchange, String path) throws IOException {
-        if ("/users".equals(path)) {
-            List<CadastrarUserModel> users = userService.findAll();
-            sendResponse(exchange, 200, gson.toJson(users));
-        } else if (path.matches("/users/\\w+")) {
-            UUID id = UUID.fromString(path.split("/")[2]);
-            Optional<CadastrarUserModel> user = userService.findById(id);
-            if (user.isPresent()) {
-                sendResponse(exchange, 200, gson.toJson(user.get()));
-            } else {
-                sendResponse(exchange, 404, "User Not Found");
-            }
         }
     }
 
@@ -75,28 +59,25 @@ public class CadastrarUserHandler implements HttpHandler {
         }
     }
 
-    private void handleAddFavorite(HttpExchange exchange, String path) throws IOException {
-        String[] pathParts = path.split("/");
-        UUID userId = UUID.fromString(pathParts[2]);
-        UUID movieId = UUID.fromString(pathParts[4]);
-        boolean success = userService.addFavoriteMovie(userId, movieId);
-        if (success) {
-            sendResponse(exchange, 204, "");
+    private void handleGet(HttpExchange exchange, String path) throws IOException {
+        if ("/users".equals(path)) {
+            List<CadastrarUserModel> users = userService.findAll();
+            sendResponse(exchange, 200, gson.toJson(users));
         } else {
-            sendResponse(exchange, 404, "User or Movie Not Found");
-        }
-    }
-
-    private void handleDelete(HttpExchange exchange, String path) throws IOException {
-        if (path.matches("/users/\\w+")) {
-            UUID id = UUID.fromString(path.split("/")[2]);
-            boolean success = userService.deleteById(id);
-            if (success) {
-                sendResponse(exchange, 204, "");
+            String userId = path.substring(path.lastIndexOf("/") + 1);
+            Optional<CadastrarUserModel> user = userService.findById(UUID.fromString(userId));
+            if (user.isPresent()) {
+                sendResponse(exchange, 200, gson.toJson(user.get()));
             } else {
                 sendResponse(exchange, 404, "User Not Found");
             }
         }
+    }
+
+    private void handleDelete(HttpExchange exchange, String path) throws IOException {
+        String userId = path.substring(path.lastIndexOf("/") + 1);
+        userService.deleteById(UUID.fromString(userId));
+        sendResponse(exchange, 204, "");
     }
 
     private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {
