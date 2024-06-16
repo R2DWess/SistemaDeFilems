@@ -17,10 +17,11 @@ public class MoviesService {
 
     public Movie save(Movie movie) {
         if (movie.getId() == null) {
-            movie.setId(UUID.randomUUID());
+            movie.setId(UUID.fromString(UUID.randomUUID().toString()));
         }
         return movieRepository.save(movie);
     }
+
 
     public List<Movie> findAll() {
         return movieRepository.findAll();

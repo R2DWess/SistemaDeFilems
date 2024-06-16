@@ -37,10 +37,11 @@ public class MoviesHandler implements HttpHandler {
                 sendResponse(exchange, 404, "Not Found");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(exchange, 500, "Internal Server Error");
+            e.printStackTrace(); // Adicione esta linha para logar a exceção
+            sendResponse(exchange, 500, "Internal Server Error: " + e.getMessage());
         }
     }
+
 
     private void handleGet(HttpExchange exchange, String path) throws IOException {
         if ("/movies".equals(path)) {
@@ -82,4 +83,5 @@ public class MoviesHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
+
 }

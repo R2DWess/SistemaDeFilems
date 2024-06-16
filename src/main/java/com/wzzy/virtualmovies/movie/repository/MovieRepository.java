@@ -27,7 +27,7 @@ public class MovieRepository {
     }
 
     public Movie findById(UUID id) {
-        return entityManager.find(Movie.class, id.toString());
+        return entityManager.find(Movie.class, id);
     }
 
     public List<Movie> findAll() {
