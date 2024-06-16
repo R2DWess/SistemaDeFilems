@@ -17,9 +17,10 @@ public class MoviesHandler implements HttpHandler {
     private MoviesService moviesService;
     private Gson gson = new Gson();
 
-    public MoviesHandler() {
+    public MoviesHandler(MoviesService moviesService) {
         this.moviesService = moviesService;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
@@ -36,6 +37,7 @@ public class MoviesHandler implements HttpHandler {
                 sendResponse(exchange, 404, "Not Found");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             sendResponse(exchange, 500, "Internal Server Error");
         }
     }
