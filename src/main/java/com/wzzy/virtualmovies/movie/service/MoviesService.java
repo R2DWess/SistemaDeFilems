@@ -16,6 +16,9 @@ public class MoviesService {
     }
 
     public Movie save(Movie movie) {
+        if (movie.getId() == null) {
+            movie.setId(UUID.randomUUID());
+        }
         return movieRepository.save(movie);
     }
 

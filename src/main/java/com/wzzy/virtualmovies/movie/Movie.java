@@ -15,7 +15,7 @@ public class Movie {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false, length = 36)
-    private String id;
+    private UUID id;
 
     private String titulo;
     private int ano;
@@ -37,11 +37,12 @@ public class Movie {
     private String videoUrl;
     private String category;
 
+
     public Movie() {
     }
 
     public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String videoUrl, String category) {
-        this.id = String.valueOf(id);
+        this.id = id;
         this.titulo = titulo;
         this.ano = ano;
         this.duracaoEmMinutos = duracaoEmMinutos;
@@ -54,11 +55,11 @@ public class Movie {
         this.videoUrl = videoUrl;
         this.category = category;
     }
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

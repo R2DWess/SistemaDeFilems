@@ -22,7 +22,6 @@ public class ApplicationSystemStream {
         try {
             HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-            // Configure context paths and handlers
             server.createContext("/movies", new MoviesHandler(moviesService));
             server.createContext("/users", new CadastrarUserHandler());
             server.createContext("/login", new LoginUserHandler(loginUserService));
