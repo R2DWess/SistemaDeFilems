@@ -15,8 +15,8 @@ public class CadastrarUserModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "id", updatable = false, nullable = false, length = 36)
-    private UUID id;
+    @Column(columnDefinition = "VARCHAR(36)")
+    private String id;
 
     @Column(nullable = false, length = 255)
     private String cpf;
@@ -52,9 +52,10 @@ public class CadastrarUserModel implements Serializable {
     private boolean isAdmin;
 
     public CadastrarUserModel() {
+        this.id = UUID.randomUUID().toString();
     }
 
-    public CadastrarUserModel(UUID id, String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
+    public CadastrarUserModel(String id, String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
         this.id = id;
         this.cpf = cpf;
         this.fullname = fullname;
@@ -69,11 +70,11 @@ public class CadastrarUserModel implements Serializable {
         this.isAdmin = isAdmin;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

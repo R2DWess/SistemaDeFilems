@@ -65,7 +65,7 @@ public class CadastrarUserHandler implements HttpHandler {
             sendResponse(exchange, 200, gson.toJson(users));
         } else {
             String userId = path.substring(path.lastIndexOf("/") + 1);
-            Optional<CadastrarUserModel> user = userService.findById(UUID.fromString(userId));
+            Optional<CadastrarUserModel> user = userService.findById(userId.toString());
             if (user.isPresent()) {
                 sendResponse(exchange, 200, gson.toJson(user.get()));
             } else {
@@ -76,7 +76,7 @@ public class CadastrarUserHandler implements HttpHandler {
 
     private void handleDelete(HttpExchange exchange, String path) throws IOException {
         String userId = path.substring(path.lastIndexOf("/") + 1);
-        userService.deleteById(UUID.fromString(userId));
+        userService.deleteById(userId.toString());
         sendResponse(exchange, 204, "");
     }
 

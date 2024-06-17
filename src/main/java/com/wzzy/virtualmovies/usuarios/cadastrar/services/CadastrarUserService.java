@@ -1,16 +1,16 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.services;
 
+import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class CadastrarUserService {
 
-    @PersistenceContext
     private EntityManager entityManager;
 
     public CadastrarUserService(EntityManager entityManager) {
@@ -18,34 +18,41 @@ public class CadastrarUserService {
     }
 
     public CadastrarUserModel save(CadastrarUserModel user) {
-        entityManager.getTransaction().begin();
         if (user.getId() == null) {
-            user.setId(UUID.randomUUID());
-            entityManager.persist(user);
-        } else {
-            user = entityManager.merge(user);
+            user.setId(UUID.randomUUID().toString());
         }
+        entityManager.getTransaction().begin();
+        entityManager.persist(user);
         entityManager.getTransaction().commit();
         return user;
     }
 
     public List<CadastrarUserModel> findAll() {
-        return entityManager.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class).getResultList();
+        TypedQuery<CadastrarUserModel> query = entityManager.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class);
+        return query.getResultList();
     }
 
-    public Optional<CadastrarUserModel> findById(UUID id) {
+    public Optional<CadastrarUserModel> findById(String id) {
         CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, id);
         return user != null ? Optional.of(user) : Optional.empty();
     }
 
-    public boolean deleteById(UUID id) {
+    public void deleteById(String id) {
         CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, id);
         if (user != null) {
             entityManager.getTransaction().begin();
             entityManager.remove(user);
             entityManager.getTransaction().commit();
-            return true;
         }
-        return false;
+    }
+
+    public void addFavoriteMovie(String userId, String movieId) {
+        CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, userId);
+        Movie movie = entityManager.find(Movie.class, movieId);
+        if (user != null && movie != null) {
+            entityManager.getTransaction().begin();
+            user.getFavoriteMovies().add(movie);
+            entityManager.getTransaction().commit();
+        }
     }
 }
