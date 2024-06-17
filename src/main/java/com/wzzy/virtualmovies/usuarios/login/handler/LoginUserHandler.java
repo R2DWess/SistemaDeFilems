@@ -24,11 +24,9 @@ public class LoginUserHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         if ("POST".equals(exchange.getRequestMethod()) && "/login".equals(exchange.getRequestURI().getPath())) {
             try {
-                // Lê o corpo da requisição
                 String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
                 LoginRequest loginRequest = gson.fromJson(body, LoginRequest.class);
 
-                // Tenta fazer o login
                 Optional<LoginResponseDto> user = loginUserService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
                 String jsonResponse;
@@ -42,7 +40,6 @@ public class LoginUserHandler implements HttpHandler {
                     exchange.sendResponseHeaders(401, jsonResponse.getBytes().length);
                 }
 
-                // Escreve a resposta
                 OutputStream os = exchange.getResponseBody();
                 os.write(jsonResponse.getBytes());
                 os.close();
@@ -54,8 +51,7 @@ public class LoginUserHandler implements HttpHandler {
                 os.close();
             }
         } else {
-            // Método não suportado
-            exchange.sendResponseHeaders(405, -1); // 405 Method Not Allowed
+            exchange.sendResponseHeaders(405, -1);
         }
     }
 }

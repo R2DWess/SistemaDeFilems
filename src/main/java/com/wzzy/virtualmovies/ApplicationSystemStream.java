@@ -27,9 +27,8 @@ public class ApplicationSystemStream {
 
         System.out.println("Server started on port 8080");
 
-        // Keep the server running
         while (true) {
-            Thread.sleep(60 * 60 * 1000); // Sleep for an hour
+            Thread.sleep(60 * 60 * 1000);
         }
     }
 }

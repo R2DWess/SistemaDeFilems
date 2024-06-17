@@ -50,7 +50,6 @@ public class LoginUserService {
         Optional<LoginUserModel> user = loginUserRepository.findByEmail(email);
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             LoginResponseDto loginResponse = new LoginResponseDto();
-            // Manual copy properties since BeanUtils is part of Spring
             loginResponse.setEmail(user.get().getEmail());
             loginResponse.setAdmin(user.get().isAdmin());
             return Optional.of(loginResponse);
@@ -61,7 +60,6 @@ public class LoginUserService {
     public boolean cadastrarUser(CadastrarUserModel newUser) {
         if (!existsByEmail(newUser.getEmail()) && !existsByCpf(newUser.getCpf())) {
             LoginUserModel loginUserModel = new LoginUserModel();
-            // Manual copy properties since BeanUtils is part of Spring
             loginUserModel.setEmail(newUser.getEmail());
             loginUserModel.setPassword(newUser.getPassword());
             loginUserModel.setAdmin(newUser.isAdmin());

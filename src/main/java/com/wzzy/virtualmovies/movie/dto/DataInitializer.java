@@ -15,20 +15,15 @@ public class DataInitializer {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("systemMoviesUnit");
         EntityManager em = emf.createEntityManager();
 
-        // Certifique-se de que a transação comece antes de criar qualquer serviço ou repositório.
         em.getTransaction().begin();
 
         try {
-            // Criação do MovieRepository passando o EntityManager
             MovieRepository movieRepository = new MovieRepository(em);
 
-            // Criação do MoviesService passando o MovieRepository
             MoviesService moviesService = new MoviesService((EntityManager) movieRepository);
 
-            // Chamar o método de inicialização de filmes
             initializeMovies(moviesService);
 
-            // Se tudo ocorreu bem, commit na transação
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
@@ -41,7 +36,6 @@ public class DataInitializer {
     }
 
     private static void initializeMovies(MoviesService moviesService) {
-        // Exemplo de inicialização do filme Avatar
         Movie avatar = new Movie();
         avatar.setTitulo("Avatar");
         avatar.setAno(2009);
@@ -55,7 +49,6 @@ public class DataInitializer {
 
         moviesService.save(avatar);
 
-        // Você pode adicionar mais chamadas para inicializar outros filmes aqui
         System.out.println("Avatar initialized successfully.");
     }
 }
