@@ -1,4 +1,4 @@
-package com.wzzy.virtualmovies.usuarios.cadastrar.controller;
+package com.wzzy.virtualmovies.usuarios.cadastrar.handler;
 
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;

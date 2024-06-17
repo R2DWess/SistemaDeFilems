@@ -1,6 +1,6 @@
 package com.wzzy.virtualmovies.unit.login;
 
-import com.wzzy.virtualmovies.usuarios.login.controller.LoginUserController;
+import com.wzzy.virtualmovies.usuarios.login.handler.LoginUserController;
 import com.wzzy.virtualmovies.usuarios.login.model.LoginResponseDto;
 import com.wzzy.virtualmovies.usuarios.login.services.LoginUserService;
 import org.junit.jupiter.api.BeforeEach;

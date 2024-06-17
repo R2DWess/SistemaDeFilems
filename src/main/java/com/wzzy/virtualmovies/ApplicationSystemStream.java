@@ -1,10 +1,10 @@
 package com.wzzy.virtualmovies;
 
 import com.sun.net.httpserver.HttpServer;
-import com.wzzy.virtualmovies.usuarios.cadastrar.controller.CadastrarUserHandler;
+import com.wzzy.virtualmovies.usuarios.cadastrar.handler.CadastrarUserHandler;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
 import com.wzzy.virtualmovies.movie.service.MoviesService;
-import com.wzzy.virtualmovies.movie.controller.MoviesHandler;
+import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
 import com.wzzy.virtualmovies.usuarios.util.JpaUtil;
 
 import javax.persistence.EntityManager;

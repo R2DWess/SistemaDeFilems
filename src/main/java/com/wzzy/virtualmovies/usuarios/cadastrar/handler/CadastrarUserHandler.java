@@ -1,4 +1,4 @@
-package com.wzzy.virtualmovies.usuarios.cadastrar.controller;
+package com.wzzy.virtualmovies.usuarios.cadastrar.handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class CadastrarUserHandler implements HttpHandler {
     private CadastrarUserService userService;

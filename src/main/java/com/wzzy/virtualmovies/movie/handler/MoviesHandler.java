@@ -1,29 +1,5 @@
-package com.wzzy.virtualmovies.movie.controller;
+package com.wzzy.virtualmovies.movie.handler;
 
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.wzzy.virtualmovies.movie.Movie;
-import com.wzzy.virtualmovies.movie.service.MoviesService;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.UUID;
-import com.google.gson.Gson;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.wzzy.virtualmovies.movie.Movie;
-import com.wzzy.virtualmovies.movie.service.MoviesService;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.UUID;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

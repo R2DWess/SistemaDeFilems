@@ -1,7 +1,7 @@
 package com.wzzy.virtualmovies.movie.config;
 
 import com.sun.net.httpserver.HttpServer;
-import com.wzzy.virtualmovies.movie.controller.MoviesHandler;
+import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
 import com.wzzy.virtualmovies.movie.service.MoviesService;
 import com.wzzy.virtualmovies.usuarios.util.JpaUtil;
 

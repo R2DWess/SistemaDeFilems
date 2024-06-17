@@ -1,6 +1,6 @@
 package com.wzzy.virtualmovies.unit.movie;
 
-import com.wzzy.virtualmovies.movie.controller.MoviesController;
+import com.wzzy.virtualmovies.movie.handler.MoviesController;
 import com.wzzy.virtualmovies.movie.service.MoviesService;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
 import org.junit.jupiter.api.BeforeEach;

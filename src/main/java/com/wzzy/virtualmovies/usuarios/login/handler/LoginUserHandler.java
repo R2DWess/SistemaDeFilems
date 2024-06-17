@@ -1,4 +1,4 @@
-package com.wzzy.virtualmovies.usuarios.login.controller;
+package com.wzzy.virtualmovies.usuarios.login.handler;
 
 import com.google.gson.Gson;
 import com.wzzy.virtualmovies.usuarios.login.model.LoginRequest;
