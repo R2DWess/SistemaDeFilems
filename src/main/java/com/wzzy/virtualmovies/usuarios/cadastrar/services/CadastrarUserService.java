@@ -1,6 +1,5 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.services;
 
-import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
 
 import javax.persistence.EntityManager;
@@ -19,13 +18,15 @@ public class CadastrarUserService {
 
     public CadastrarUserModel save(CadastrarUserModel user) {
         if (user.getId() == null) {
-            user.setId(UUID.randomUUID().toString());
+            user.setId(UUID.randomUUID());
         }
         entityManager.getTransaction().begin();
-        entityManager.persist(user);
+        CadastrarUserModel managedUser = entityManager.merge(user); // Merge the detached entity
+        entityManager.persist(managedUser); // Persist the managed entity
         entityManager.getTransaction().commit();
-        return user;
+        return managedUser;
     }
+
 
     public List<CadastrarUserModel> findAll() {
         TypedQuery<CadastrarUserModel> query = entityManager.createQuery("SELECT u FROM CadastrarUserModel u", CadastrarUserModel.class);
@@ -42,16 +43,6 @@ public class CadastrarUserService {
         if (user != null) {
             entityManager.getTransaction().begin();
             entityManager.remove(user);
-            entityManager.getTransaction().commit();
-        }
-    }
-
-    public void addFavoriteMovie(String userId, String movieId) {
-        CadastrarUserModel user = entityManager.find(CadastrarUserModel.class, userId);
-        Movie movie = entityManager.find(Movie.class, movieId);
-        if (user != null && movie != null) {
-            entityManager.getTransaction().begin();
-            user.getFavoriteMovies().add(movie);
             entityManager.getTransaction().commit();
         }
     }

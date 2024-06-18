@@ -1,45 +1,42 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.model;
 
 import com.wzzy.virtualmovies.movie.Movie;
+import lombok.Data;
 
-import java.util.UUID;
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "TB_USERS_STREAM")
-public class CadastrarUserModel implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class CadastrarUserModel {
 
     @Id
-    @Column(columnDefinition = "VARCHAR(36)")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String cpf;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String fullname;
 
-    @Column(length = 255)
     private String socialname;
 
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @Column(length = 255)
     private String rg;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String cellphone;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String password;
 
     @OneToMany
@@ -51,12 +48,13 @@ public class CadastrarUserModel implements Serializable {
     @Column(nullable = false)
     private boolean isAdmin;
 
+    // Construtor vazio
     public CadastrarUserModel() {
-        this.id = UUID.randomUUID().toString();
     }
 
-    public CadastrarUserModel(String id, String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
-        this.id = id;
+    // Construtor completo
+    public CadastrarUserModel(String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
+        this.id = UUID.randomUUID(); // Gera um UUID aleatório
         this.cpf = cpf;
         this.fullname = fullname;
         this.socialname = socialname;
@@ -70,11 +68,11 @@ public class CadastrarUserModel implements Serializable {
         this.isAdmin = isAdmin;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -162,7 +160,7 @@ public class CadastrarUserModel implements Serializable {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean admin) {
+    public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
 }

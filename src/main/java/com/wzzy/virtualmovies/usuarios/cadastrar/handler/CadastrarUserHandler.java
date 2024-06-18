@@ -50,33 +50,37 @@ public class CadastrarUserHandler implements HttpHandler {
         }
     }
 
-    private void handleGet(HttpExchange exchange, String path) throws IOException {
-        if ("/users".equals(path)) {
-            List<CadastrarUserModel> users = userService.findAll();
-            sendResponse(exchange, 200, gson.toJson(users));
-        } else {
-            String userId = path.substring(path.lastIndexOf("/") + 1);
-            Optional<CadastrarUserModel> user = userService.findById(userId);
-            if (user.isPresent()) {
-                sendResponse(exchange, 200, gson.toJson(user.get()));
-            } else {
-                sendResponse(exchange, 404, "User Not Found");
-            }
-        }
-    }
-
     private void handlePost(HttpExchange exchange, String path) throws IOException {
         if ("/users".equals(path)) {
             InputStreamReader reader = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
             CadastrarUserModel user = gson.fromJson(reader, CadastrarUserModel.class);
             CadastrarUserModel savedUser = userService.save(user);
             sendResponse(exchange, 201, gson.toJson(savedUser));
+        } else {
+            sendResponse(exchange, 404, "Not Found");
+        }
+    }
+
+    private void handleGet(HttpExchange exchange, String path) throws IOException {
+        if ("/users".equals(path)) {
+            List<CadastrarUserModel> users = userService.findAll();
+            String jsonResponse = gson.toJson(users);
+            sendResponse(exchange, 200, jsonResponse);
+        } else {
+            String userId = path.substring(path.lastIndexOf("/") + 1);
+            Optional<CadastrarUserModel> user = userService.findById(userId.toString());
+            if (user.isPresent()) {
+                String jsonResponse = gson.toJson(user.get());
+                sendResponse(exchange, 200, jsonResponse);
+            } else {
+                sendResponse(exchange, 404, "User Not Found");
+            }
         }
     }
 
     private void handleDelete(HttpExchange exchange, String path) throws IOException {
         String userId = path.substring(path.lastIndexOf("/") + 1);
-        userService.deleteById(userId);
+        userService.deleteById(userId.toString());
         sendResponse(exchange, 204, "");
     }
 
