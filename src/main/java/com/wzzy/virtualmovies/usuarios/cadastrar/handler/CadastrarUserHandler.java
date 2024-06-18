@@ -45,7 +45,23 @@ public class CadastrarUserHandler implements HttpHandler {
                     sendResponse(exchange, 405, "Method Not Allowed");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             sendResponse(exchange, 500, "Internal Server Error");
+        }
+    }
+
+    private void handleGet(HttpExchange exchange, String path) throws IOException {
+        if ("/users".equals(path)) {
+            List<CadastrarUserModel> users = userService.findAll();
+            sendResponse(exchange, 200, gson.toJson(users));
+        } else {
+            String userId = path.substring(path.lastIndexOf("/") + 1);
+            Optional<CadastrarUserModel> user = userService.findById(userId);
+            if (user.isPresent()) {
+                sendResponse(exchange, 200, gson.toJson(user.get()));
+            } else {
+                sendResponse(exchange, 404, "User Not Found");
+            }
         }
     }
 
@@ -58,24 +74,9 @@ public class CadastrarUserHandler implements HttpHandler {
         }
     }
 
-    private void handleGet(HttpExchange exchange, String path) throws IOException {
-        if ("/users".equals(path)) {
-            List<CadastrarUserModel> users = userService.findAll();
-            sendResponse(exchange, 200, gson.toJson(users));
-        } else {
-            String userId = path.substring(path.lastIndexOf("/") + 1);
-            Optional<CadastrarUserModel> user = userService.findById(userId.toString());
-            if (user.isPresent()) {
-                sendResponse(exchange, 200, gson.toJson(user.get()));
-            } else {
-                sendResponse(exchange, 404, "User Not Found");
-            }
-        }
-    }
-
     private void handleDelete(HttpExchange exchange, String path) throws IOException {
         String userId = path.substring(path.lastIndexOf("/") + 1);
-        userService.deleteById(userId.toString());
+        userService.deleteById(userId);
         sendResponse(exchange, 204, "");
     }
 
