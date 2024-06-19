@@ -21,8 +21,8 @@ public class CadastrarUserService {
             user.setId(UUID.randomUUID());
         }
         entityManager.getTransaction().begin();
-        CadastrarUserModel managedUser = entityManager.merge(user); // Merge the detached entity
-        entityManager.persist(managedUser); // Persist the managed entity
+        CadastrarUserModel managedUser = entityManager.merge(user);
+        entityManager.persist(managedUser);
         entityManager.getTransaction().commit();
         return managedUser;
     }
