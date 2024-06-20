@@ -1,5 +1,11 @@
 package com.wzzy.virtualmovies.usuarios.login.handler;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.Optional;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
@@ -8,12 +14,6 @@ import com.wzzy.virtualmovies.usuarios.login.model.LoginRequest;
 import com.wzzy.virtualmovies.usuarios.login.model.LoginResponseDto;
 import com.wzzy.virtualmovies.usuarios.login.services.LoginUserService;
 import com.wzzy.virtualmovies.usuarios.util.LocalDateAdapter;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.Optional;
 
 public class LoginUserHandler implements HttpHandler {
 
@@ -32,7 +32,8 @@ public class LoginUserHandler implements HttpHandler {
                 String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
                 LoginRequest loginRequest = gson.fromJson(body, LoginRequest.class);
 
-                Optional<LoginResponseDto> user = loginUserService.login(loginRequest.getEmail(), loginRequest.getPassword());
+                Optional<LoginResponseDto> user = loginUserService.login(loginRequest.getEmail(),
+                        loginRequest.getPassword());
 
                 String jsonResponse;
                 if (user.isPresent()) {

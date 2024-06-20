@@ -1,13 +1,5 @@
 package com.wzzy.virtualmovies.usuarios.cadastrar.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
-import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
-import com.wzzy.virtualmovies.usuarios.util.LocalDateAdapter;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -15,6 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.wzzy.virtualmovies.usuarios.cadastrar.model.CadastrarUserModel;
+import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
+import com.wzzy.virtualmovies.usuarios.util.LocalDateAdapter;
 
 public class CadastrarUserHandler implements HttpHandler {
     private CadastrarUserService userService;
