@@ -67,7 +67,6 @@ public class MovieRepository {
             existingMovie.setAtores(updatedMovie.getAtores());
             existingMovie.setPoster(updatedMovie.getPoster());
             existingMovie.setMetascore(updatedMovie.getMetascore());
-            // Atualiza outros campos conforme necessário
             return save(existingMovie);
         } else {
             throw new RuntimeException("Movie not found with title: " + titulo);

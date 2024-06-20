@@ -48,13 +48,11 @@ public class CadastrarUserModel {
     @Column(nullable = false)
     private boolean isAdmin;
 
-    // Construtor vazio
     public CadastrarUserModel() {
     }
 
-    // Construtor completo
     public CadastrarUserModel(String cpf, String fullname, String socialname, LocalDate birthdate, String rg, String cellphone, String email, String password, List<Movie> movieList, List<Movie> favoriteMovies, boolean isAdmin) {
-        this.id = UUID.randomUUID(); // Gera um UUID aleatório
+        this.id = UUID.randomUUID();
         this.cpf = cpf;
         this.fullname = fullname;
         this.socialname = socialname;

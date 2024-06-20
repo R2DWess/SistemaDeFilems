@@ -48,12 +48,12 @@ public class MoviesHandler implements HttpHandler {
                     }
                     break;
                 default:
-                    exchange.sendResponseHeaders(405, -1); // Método não permitido
+                    exchange.sendResponseHeaders(405, -1);
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            exchange.sendResponseHeaders(500, -1); // Erro interno do servidor
+            exchange.sendResponseHeaders(500, -1);
         }
     }
 
@@ -69,7 +69,7 @@ public class MoviesHandler implements HttpHandler {
             String response = gson.toJson(movie);
             sendResponse(exchange, response, 200);
         } else {
-            exchange.sendResponseHeaders(404, -1); // Não encontrado
+            exchange.sendResponseHeaders(404, -1);
         }
     }
 
@@ -77,7 +77,7 @@ public class MoviesHandler implements HttpHandler {
         Movie movie = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8), Movie.class);
         Movie savedMovie = moviesService.save(movie);
         String response = gson.toJson(savedMovie);
-        sendResponse(exchange, response, 201); // Criado
+        sendResponse(exchange, response, 201);
     }
 
     private void handlePut(HttpExchange exchange, String titulo) throws IOException {
@@ -85,18 +85,18 @@ public class MoviesHandler implements HttpHandler {
         Movie savedMovie = moviesService.updateByTitulo(titulo, updatedMovie);
         if (savedMovie != null) {
             String response = gson.toJson(savedMovie);
-            sendResponse(exchange, response, 200); // OK
+            sendResponse(exchange, response, 200);
         } else {
-            exchange.sendResponseHeaders(404, -1); // Não encontrado
+            exchange.sendResponseHeaders(404, -1);
         }
     }
 
     private void handleDelete(HttpExchange exchange, String titulo) throws IOException {
         boolean success = moviesService.deleteByTitulo(titulo);
         if (success) {
-            exchange.sendResponseHeaders(204, -1); // Sem conteúdo
+            exchange.sendResponseHeaders(204, -1);
         } else {
-            exchange.sendResponseHeaders(404, -1); // Não encontrado
+            exchange.sendResponseHeaders(404, -1);
         }
     }
 

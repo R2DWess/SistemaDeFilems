@@ -28,11 +28,11 @@ public class Movie {
     private List<String> atores;
 
     public Movie() {
-        this.id = UUID.randomUUID(); // Adicionado para inicializar o ID
+        this.id = UUID.randomUUID();
     }
 
     public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String category, String videoUrl) {
-        this.id = id != null ? id : UUID.randomUUID(); // Garantir que o ID seja inicializado
+        this.id = id != null ? id : UUID.randomUUID();
         this.titulo = titulo;
         this.ano = ano;
         this.duracaoEmMinutos = duracaoEmMinutos;
