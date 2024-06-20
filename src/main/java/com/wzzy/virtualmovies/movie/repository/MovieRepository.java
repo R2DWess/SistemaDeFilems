@@ -3,13 +3,12 @@ package com.wzzy.virtualmovies.movie.repository;
 import com.wzzy.virtualmovies.movie.Movie;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.UUID;
 
 public class MovieRepository {
-    @PersistenceContext
+
     private EntityManager entityManager;
 
     public MovieRepository(EntityManager em) {
@@ -44,6 +43,34 @@ public class MovieRepository {
             entityManager.remove(movie);
         } else {
             entityManager.remove(entityManager.merge(movie));
+        }
+    }
+
+    public boolean deleteByTitulo(String titulo) {
+        List<Movie> movies = findByTitulo(titulo);
+        if (!movies.isEmpty()) {
+            delete(movies.get(0));
+            return true;
+        }
+        return false;
+    }
+
+    public Movie updateByTitulo(String titulo, Movie updatedMovie) {
+        List<Movie> movies = findByTitulo(titulo);
+        if (!movies.isEmpty()) {
+            Movie existingMovie = movies.get(0);
+            existingMovie.setAno(updatedMovie.getAno());
+            existingMovie.setDuracaoEmMinutos(updatedMovie.getDuracaoEmMinutos());
+            existingMovie.setGenero(updatedMovie.getGenero());
+            existingMovie.setDiretor(updatedMovie.getDiretor());
+            existingMovie.setRoteiristas(updatedMovie.getRoteiristas());
+            existingMovie.setAtores(updatedMovie.getAtores());
+            existingMovie.setPoster(updatedMovie.getPoster());
+            existingMovie.setMetascore(updatedMovie.getMetascore());
+            // Atualiza outros campos conforme necessário
+            return save(existingMovie);
+        } else {
+            throw new RuntimeException("Movie not found with title: " + titulo);
         }
     }
 }

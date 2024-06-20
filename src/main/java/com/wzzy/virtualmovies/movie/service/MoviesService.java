@@ -4,49 +4,91 @@ import com.wzzy.virtualmovies.movie.Movie;
 import com.wzzy.virtualmovies.movie.repository.MovieRepository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.UUID;
 
 public class MoviesService {
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+    private final MovieRepository movieRepository;
 
-    private MovieRepository movieRepository;
-
-    public MoviesService(EntityManager em) {
-        this.entityManager = em;
-        this.movieRepository = new MovieRepository(em);
+    public MoviesService(EntityManager entityManager) {
+        this.entityManager = entityManager;
+        this.movieRepository = new MovieRepository(entityManager);
     }
 
-    public Movie save(Movie movie) {
-        entityManager.getTransaction().begin();
-        if (movie.getId() == null) {
-            movie.setId(UUID.randomUUID());
-        }
-        movie = entityManager.merge(movie);
-        entityManager.getTransaction().commit();
-        return movie;
-    }
-
-    public List<Movie> findAll() {
+    public List<Movie> getAllMovies() {
         return movieRepository.findAll();
     }
 
-    public Movie findById(UUID id) {
-        return movieRepository.findById(id);
+    public Movie getMovieByTitulo(String titulo) {
+        List<Movie> movies = movieRepository.findByTitulo(titulo);
+        return movies.isEmpty() ? null : movies.get(0);
     }
 
-    public List<Movie> findByTitulo(String titulo) {
-        return movieRepository.findByTitulo(titulo);
-    }
-
-    public boolean deleteById(UUID id) {
-        Movie movie = findById(id);
-        if (movie != null) {
-            movieRepository.delete(movie);
-            return true;
+    public void save(Movie movie) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            if (movie.getId() == null) {
+                movie.setId(UUID.randomUUID());
+            }
+            movieRepository.save(movie);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao salvar o filme", e);
         }
-        return false;
+    }
+
+    public boolean updateByTitulo(String titulo, Movie updatedMovie) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            Movie existingMovie = getMovieByTitulo(titulo);
+            if (existingMovie == null) {
+                return false;
+            }
+            existingMovie.setAno(updatedMovie.getAno());
+            existingMovie.setCategory(updatedMovie.getCategory());
+            existingMovie.setDiretor(updatedMovie.getDiretor());
+            existingMovie.setDuracaoEmMinutos(updatedMovie.getDuracaoEmMinutos());
+            existingMovie.setMetascore(updatedMovie.getMetascore());
+            existingMovie.setPoster(updatedMovie.getPoster());
+            existingMovie.setTitulo(updatedMovie.getTitulo());
+            existingMovie.setVideoUrl(updatedMovie.getVideoUrl());
+            existingMovie.setAtores(updatedMovie.getAtores());
+            existingMovie.setGenero(updatedMovie.getGenero());
+            existingMovie.setRoteiristas(updatedMovie.getRoteiristas());
+            movieRepository.save(existingMovie);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao atualizar o filme", e);
+        }
+    }
+
+    public boolean deleteByTitulo(String titulo) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            Movie movie = getMovieByTitulo(titulo);
+            if (movie == null) {
+                return false;
+            }
+            movieRepository.delete(movie);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao deletar o filme", e);
+        }
     }
 }

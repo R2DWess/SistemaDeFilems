@@ -1,30 +1,25 @@
 package com.wzzy.virtualmovies.movie;
 
-import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
 public class Movie {
-
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false, length = 36)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
-
     private String titulo;
     private int ano;
     private int duracaoEmMinutos;
+    private int metascore;
+    private String poster;
+    private String category;
+    private String videoUrl;
+    private String diretor;
 
     @ElementCollection
     private List<String> genero;
-
-    private String diretor;
 
     @ElementCollection
     private List<String> roteiristas;
@@ -32,16 +27,12 @@ public class Movie {
     @ElementCollection
     private List<String> atores;
 
-    private String poster;
-    private int metascore;
-    private String videoUrl;
-    private String category;
-
     public Movie() {
+        this.id = UUID.randomUUID(); // Adicionado para inicializar o ID
     }
 
-    public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore) {
-        this.id = id;
+    public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String category, String videoUrl) {
+        this.id = id != null ? id : UUID.randomUUID(); // Garantir que o ID seja inicializado
         this.titulo = titulo;
         this.ano = ano;
         this.duracaoEmMinutos = duracaoEmMinutos;
@@ -51,6 +42,8 @@ public class Movie {
         this.atores = atores;
         this.poster = poster;
         this.metascore = metascore;
+        this.category = category;
+        this.videoUrl = videoUrl;
     }
 
     public UUID getId() {
@@ -133,19 +126,19 @@ public class Movie {
         this.metascore = metascore;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }
