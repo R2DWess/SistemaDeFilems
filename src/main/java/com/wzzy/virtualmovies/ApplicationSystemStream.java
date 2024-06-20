@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import com.sun.net.httpserver.HttpServer;
 import com.wzzy.virtualmovies.Cors.CORSFilter;
+import com.wzzy.virtualmovies.movie.dto.MovieDataInitializer;
 import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
 import com.wzzy.virtualmovies.movie.service.MoviesService;
 import com.wzzy.virtualmovies.usuarios.cadastrar.handler.CadastrarUserHandler;
@@ -32,6 +33,8 @@ public class ApplicationSystemStream {
         server.start();
 
         System.out.println("Server started on port 8080");
+        MovieDataInitializer dataInitializer = new MovieDataInitializer();
+        dataInitializer.initialize(moviesService);
 
         while (true) {
             Thread.sleep(60 * 60 * 1000);

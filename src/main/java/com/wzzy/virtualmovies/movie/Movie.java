@@ -40,7 +40,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String videoUrl, String category) {
+    public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore) {
         this.id = id;
         this.titulo = titulo;
         this.ano = ano;
@@ -51,9 +51,8 @@ public class Movie {
         this.atores = atores;
         this.poster = poster;
         this.metascore = metascore;
-        this.videoUrl = videoUrl;
-        this.category = category;
     }
+
     public UUID getId() {
         return id;
     }
