@@ -3,6 +3,7 @@ package com.wzzy.virtualmovies;
 import java.net.InetSocketAddress;
 import javax.persistence.EntityManager;
 import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpContext;
 import com.wzzy.virtualmovies.Cors.CORSFilter;
 import com.wzzy.virtualmovies.movie.dto.MovieDataInitializer;
 import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
@@ -23,9 +24,14 @@ public class ApplicationSystemStream {
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-        server.createContext("/movies", new MoviesHandler(moviesService));
-        server.createContext("/users", new CadastrarUserHandler(cadastrarUserService));
-        server.createContext("/login", new LoginUserHandler(loginUserService));
+        HttpContext moviesContext = server.createContext("/movies", new MoviesHandler(moviesService));
+        moviesContext.getFilters().add(new CORSFilter(moviesContext.getHandler()));
+
+        HttpContext usersContext = server.createContext("/users", new CadastrarUserHandler(cadastrarUserService));
+        usersContext.getFilters().add(new CORSFilter(usersContext.getHandler()));
+
+        HttpContext loginContext = server.createContext("/login", new LoginUserHandler(loginUserService));
+        loginContext.getFilters().add(new CORSFilter(loginContext.getHandler()));
 
         server.setExecutor(null);
         server.start();
