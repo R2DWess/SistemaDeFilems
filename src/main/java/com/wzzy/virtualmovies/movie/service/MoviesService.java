@@ -26,15 +26,16 @@ public class MoviesService {
         return movies.isEmpty() ? null : movies.get(0);
     }
 
-    public void save(Movie movie) {
+    public Movie save(Movie movie) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
             if (movie.getId() == null) {
                 movie.setId(UUID.randomUUID());
             }
-            movieRepository.save(movie);
+            Movie savedMovie = movieRepository.save(movie);
             transaction.commit();
+            return savedMovie;
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
@@ -43,13 +44,13 @@ public class MoviesService {
         }
     }
 
-    public boolean updateByTitulo(String titulo, Movie updatedMovie) {
+    public Movie updateByTitulo(String titulo, Movie updatedMovie) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
             Movie existingMovie = getMovieByTitulo(titulo);
             if (existingMovie == null) {
-                return false;
+                return null;
             }
             existingMovie.setAno(updatedMovie.getAno());
             existingMovie.setCategory(updatedMovie.getCategory());
@@ -62,9 +63,9 @@ public class MoviesService {
             existingMovie.setAtores(updatedMovie.getAtores());
             existingMovie.setGenero(updatedMovie.getGenero());
             existingMovie.setRoteiristas(updatedMovie.getRoteiristas());
-            movieRepository.save(existingMovie);
+            Movie savedMovie = movieRepository.save(existingMovie);
             transaction.commit();
-            return true;
+            return savedMovie;
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();

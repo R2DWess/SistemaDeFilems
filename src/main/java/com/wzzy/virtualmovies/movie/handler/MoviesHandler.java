@@ -75,15 +75,17 @@ public class MoviesHandler implements HttpHandler {
 
     private void handlePost(HttpExchange exchange) throws IOException {
         Movie movie = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8), Movie.class);
-        moviesService.save(movie);
-        exchange.sendResponseHeaders(201, -1); // Criado
+        Movie savedMovie = moviesService.save(movie);
+        String response = gson.toJson(savedMovie);
+        sendResponse(exchange, response, 201); // Criado
     }
 
     private void handlePut(HttpExchange exchange, String titulo) throws IOException {
         Movie updatedMovie = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8), Movie.class);
-        boolean success = moviesService.updateByTitulo(titulo, updatedMovie);
-        if (success) {
-            exchange.sendResponseHeaders(204, -1); // Sem conteúdo
+        Movie savedMovie = moviesService.updateByTitulo(titulo, updatedMovie);
+        if (savedMovie != null) {
+            String response = gson.toJson(savedMovie);
+            sendResponse(exchange, response, 200); // OK
         } else {
             exchange.sendResponseHeaders(404, -1); // Não encontrado
         }
