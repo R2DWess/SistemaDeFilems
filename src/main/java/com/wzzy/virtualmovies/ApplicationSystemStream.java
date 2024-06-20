@@ -1,12 +1,13 @@
 package com.wzzy.virtualmovies;
 
 import com.sun.net.httpserver.HttpServer;
+import com.wzzy.virtualmovies.movie.dto.MovieDataInitializer;
+import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
+import com.wzzy.virtualmovies.movie.service.MoviesService;
 import com.wzzy.virtualmovies.usuarios.cadastrar.handler.CadastrarUserHandler;
 import com.wzzy.virtualmovies.usuarios.cadastrar.services.CadastrarUserService;
 import com.wzzy.virtualmovies.usuarios.login.handler.LoginUserHandler;
 import com.wzzy.virtualmovies.usuarios.login.services.LoginUserService;
-import com.wzzy.virtualmovies.movie.service.MoviesService;
-import com.wzzy.virtualmovies.movie.handler.MoviesHandler;
 import com.wzzy.virtualmovies.usuarios.util.JpaUtil;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,8 @@ public class ApplicationSystemStream {
         server.start();
 
         System.out.println("Server started on port 8080");
+        MovieDataInitializer dataInitializer = new MovieDataInitializer();
+        dataInitializer.initialize(moviesService);
 
         while (true) {
             Thread.sleep(60 * 60 * 1000);
