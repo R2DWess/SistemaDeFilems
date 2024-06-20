@@ -34,7 +34,6 @@ public class ApplicationSystemStream {
         MovieDataInitializer dataInitializer = new MovieDataInitializer();
         dataInitializer.initialize(moviesService);
 
-        // Mantém o servidor ativo
         while (true) {
             Thread.sleep(60 * 60 * 1000);
         }
