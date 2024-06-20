@@ -5,7 +5,6 @@ import com.wzzy.virtualmovies.movie.Movie;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
-import java.util.UUID;
 
 public class MovieRepository {
 
@@ -24,7 +23,7 @@ public class MovieRepository {
         return movie;
     }
 
-    public Movie findById(UUID id) {
+    public Movie findById(Long id) {
         return entityManager.find(Movie.class, id);
     }
 
@@ -46,30 +45,12 @@ public class MovieRepository {
         }
     }
 
-    public boolean deleteByTitulo(String titulo) {
-        List<Movie> movies = findByTitulo(titulo);
-        if (!movies.isEmpty()) {
-            delete(movies.get(0));
+    public boolean deleteById(Long id) {
+        Movie movie = findById(id);
+        if (movie != null) {
+            delete(movie);
             return true;
         }
         return false;
-    }
-
-    public Movie updateByTitulo(String titulo, Movie updatedMovie) {
-        List<Movie> movies = findByTitulo(titulo);
-        if (!movies.isEmpty()) {
-            Movie existingMovie = movies.get(0);
-            existingMovie.setAno(updatedMovie.getAno());
-            existingMovie.setDuracaoEmMinutos(updatedMovie.getDuracaoEmMinutos());
-            existingMovie.setGenero(updatedMovie.getGenero());
-            existingMovie.setDiretor(updatedMovie.getDiretor());
-            existingMovie.setRoteiristas(updatedMovie.getRoteiristas());
-            existingMovie.setAtores(updatedMovie.getAtores());
-            existingMovie.setPoster(updatedMovie.getPoster());
-            existingMovie.setMetascore(updatedMovie.getMetascore());
-            return save(existingMovie);
-        } else {
-            throw new RuntimeException("Movie not found with title: " + titulo);
-        }
     }
 }

@@ -2,13 +2,12 @@ package com.wzzy.virtualmovies.movie;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 public class Movie {
     @Id
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String titulo;
     private int ano;
     private int duracaoEmMinutos;
@@ -28,11 +27,9 @@ public class Movie {
     private List<String> atores;
 
     public Movie() {
-        this.id = UUID.randomUUID();
     }
 
-    public Movie(UUID id, String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String category, String videoUrl) {
-        this.id = id != null ? id : UUID.randomUUID();
+    public Movie(String titulo, int ano, int duracaoEmMinutos, List<String> genero, String diretor, List<String> roteiristas, List<String> atores, String poster, int metascore, String category, String videoUrl) {
         this.titulo = titulo;
         this.ano = ano;
         this.duracaoEmMinutos = duracaoEmMinutos;
@@ -46,11 +43,11 @@ public class Movie {
         this.videoUrl = videoUrl;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

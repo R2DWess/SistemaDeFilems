@@ -6,7 +6,6 @@ import com.wzzy.virtualmovies.movie.repository.MovieRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
-import java.util.UUID;
 
 public class MoviesService {
     private final EntityManager entityManager;
@@ -21,18 +20,14 @@ public class MoviesService {
         return movieRepository.findAll();
     }
 
-    public Movie getMovieByTitulo(String titulo) {
-        List<Movie> movies = movieRepository.findByTitulo(titulo);
-        return movies.isEmpty() ? null : movies.get(0);
+    public Movie getMovieById(Long id) {
+        return movieRepository.findById(id);
     }
 
     public Movie save(Movie movie) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            if (movie.getId() == null) {
-                movie.setId(UUID.randomUUID());
-            }
             Movie savedMovie = movieRepository.save(movie);
             transaction.commit();
             return savedMovie;
@@ -44,11 +39,11 @@ public class MoviesService {
         }
     }
 
-    public Movie updateByTitulo(String titulo, Movie updatedMovie) {
+    public Movie updateById(Long id, Movie updatedMovie) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            Movie existingMovie = getMovieByTitulo(titulo);
+            Movie existingMovie = getMovieById(id);
             if (existingMovie == null) {
                 return null;
             }
@@ -74,17 +69,13 @@ public class MoviesService {
         }
     }
 
-    public boolean deleteByTitulo(String titulo) {
+    public boolean deleteById(Long id) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            Movie movie = getMovieByTitulo(titulo);
-            if (movie == null) {
-                return false;
-            }
-            movieRepository.delete(movie);
+            boolean success = movieRepository.deleteById(id);
             transaction.commit();
-            return true;
+            return success;
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();

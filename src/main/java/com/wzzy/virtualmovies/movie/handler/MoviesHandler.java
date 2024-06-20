@@ -3,8 +3,8 @@ package com.wzzy.virtualmovies.movie.handler;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.wzzy.virtualmovies.movie.service.MoviesService;
 import com.wzzy.virtualmovies.movie.Movie;
+import com.wzzy.virtualmovies.movie.service.MoviesService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,7 +29,7 @@ public class MoviesHandler implements HttpHandler {
             switch (method) {
                 case "GET":
                     if (segments.length == 3) {
-                        handleGetByTitulo(exchange, segments[2]);
+                        handleGetById(exchange, Long.parseLong(segments[2]));
                     } else {
                         handleGetAll(exchange);
                     }
@@ -39,12 +39,12 @@ public class MoviesHandler implements HttpHandler {
                     break;
                 case "PUT":
                     if (segments.length == 3) {
-                        handlePut(exchange, segments[2]);
+                        handlePut(exchange, Long.parseLong(segments[2]));
                     }
                     break;
                 case "DELETE":
                     if (segments.length == 3) {
-                        handleDelete(exchange, segments[2]);
+                        handleDelete(exchange, Long.parseLong(segments[2]));
                     }
                     break;
                 default:
@@ -63,8 +63,8 @@ public class MoviesHandler implements HttpHandler {
         sendResponse(exchange, response, 200);
     }
 
-    private void handleGetByTitulo(HttpExchange exchange, String titulo) throws IOException {
-        Movie movie = moviesService.getMovieByTitulo(titulo);
+    private void handleGetById(HttpExchange exchange, Long id) throws IOException {
+        Movie movie = moviesService.getMovieById(id);
         if (movie != null) {
             String response = gson.toJson(movie);
             sendResponse(exchange, response, 200);
@@ -80,9 +80,9 @@ public class MoviesHandler implements HttpHandler {
         sendResponse(exchange, response, 201);
     }
 
-    private void handlePut(HttpExchange exchange, String titulo) throws IOException {
+    private void handlePut(HttpExchange exchange, Long id) throws IOException {
         Movie updatedMovie = gson.fromJson(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8), Movie.class);
-        Movie savedMovie = moviesService.updateByTitulo(titulo, updatedMovie);
+        Movie savedMovie = moviesService.updateById(id, updatedMovie);
         if (savedMovie != null) {
             String response = gson.toJson(savedMovie);
             sendResponse(exchange, response, 200);
@@ -91,8 +91,8 @@ public class MoviesHandler implements HttpHandler {
         }
     }
 
-    private void handleDelete(HttpExchange exchange, String titulo) throws IOException {
-        boolean success = moviesService.deleteByTitulo(titulo);
+    private void handleDelete(HttpExchange exchange, Long id) throws IOException {
+        boolean success = moviesService.deleteById(id);
         if (success) {
             exchange.sendResponseHeaders(204, -1);
         } else {
