@@ -71,6 +71,41 @@ java -Dexec.mainClass="org.example.ApplicationSystemStream"
 - GitHub
 - IntelliJ IDEA
 
-## 📞 Contato
+## 🤝 Colaboradores
 
-Para mais informações, entre em contato pelo email
+Agradecemos às seguintes pessoas que contribuíram para este projeto:
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="#" title="defina o titulo do link">
+        <img src="https://media.licdn.com/dms/image/D4D03AQGnIzTyPW-ctw/profile-displayphoto-shrink_800_800/0/1718908709929?e=1724284800&v=beta&t=Cnilj9FRnljF4pW7s_gzoXJlAbVOBGz96o-1YJ29pOw" width="100px;" alt="Foto do Wesley Lima"/><br>
+        <sub>
+          <b>Wesley Lima</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="#" title="defina o titulo do link">
+        <img src="https://media.licdn.com/dms/image/D4D03AQEaYTyYetINkQ/profile-displayphoto-shrink_800_800/0/1685739079307?e=1721865600&v=beta&t=eRedKXode-PexxMiM_nsKYHx1PPr5VvVu5ccmDPTA98" width="100px;" alt="Pedro Henrrique"/><br>
+        <sub>
+          <b>Pedro Henrrique</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="#" title="defina o titulo do link">
+        <img src="https://media.licdn.com/dms/image/D4E03AQH7DooITDfsKQ/profile-displayphoto-shrink_400_400/0/1688525101280?e=1721865600&v=beta&t=tksNGtTdjl9WKAeYuDj4gZL0_GgSeEYhgdTpz1omEv4" width="100px;" alt="Foto do Steve Jobs"/><br>
+        <sub>
+          <b>Pedro Cesar</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
+
+
+## 📝 Licença
+
+Esse projeto está sob licença. Veja o arquivo [LICENÇA](https://github.com/R2DWess/SistemaDeFilmes/blob/main/LICENSE) para mais detalhes.
+
