@@ -78,7 +78,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
 <table>
   <tr>
     <td align="center">
-      <a href="#" title="defina o titulo do link">
+      <a href="https://www.linkedin.com/in/wesley-lima-244405251/" title="Wesley Lima">
         <img src="https://media.licdn.com/dms/image/D4D03AQGnIzTyPW-ctw/profile-displayphoto-shrink_800_800/0/1718908709929?e=1724284800&v=beta&t=Cnilj9FRnljF4pW7s_gzoXJlAbVOBGz96o-1YJ29pOw" width="100px;" alt="Foto do Wesley Lima"/><br>
         <sub>
           <b>Wesley Lima</b>
@@ -86,16 +86,16 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
       </a>
     </td>
     <td align="center">
-      <a href="#" title="defina o titulo do link">
-        <img src="https://media.licdn.com/dms/image/D4D03AQEaYTyYetINkQ/profile-displayphoto-shrink_800_800/0/1685739079307?e=1721865600&v=beta&t=eRedKXode-PexxMiM_nsKYHx1PPr5VvVu5ccmDPTA98" width="100px;" alt="Pedro Henrrique"/><br>
+      <a href="https://www.linkedin.com/in/pdr-hp2004/" title="Pedro Henrique">
+        <img src="https://media.licdn.com/dms/image/D4D03AQEaYTyYetINkQ/profile-displayphoto-shrink_800_800/0/1685739079307?e=1721865600&v=beta&t=eRedKXode-PexxMiM_nsKYHx1PPr5VvVu5ccmDPTA98" width="100px;" alt="Pedro Henrique"/><br>
         <sub>
-          <b>Pedro Henrrique</b>
+          <b>Pedro Henrique</b>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="#" title="defina o titulo do link">
-        <img src="https://media.licdn.com/dms/image/D4E03AQH7DooITDfsKQ/profile-displayphoto-shrink_400_400/0/1688525101280?e=1721865600&v=beta&t=tksNGtTdjl9WKAeYuDj4gZL0_GgSeEYhgdTpz1omEv4" width="100px;" alt="Foto do Steve Jobs"/><br>
+      <a href="https://www.linkedin.com/in/pedro-c%C3%A9sarr-2oo2/" title="Pedro Cesar">
+        <img src="https://media.licdn.com/dms/image/D4E03AQH7DooITDfsKQ/profile-displayphoto-shrink_400_400/0/1688525101280?e=1721865600&v=beta&t=tksNGtTdjl9WKAeYuDj4gZL0_GgSeEYhgdTpz1omEv4" width="100px;" alt="Foto do Pedro Cesar"/><br>
         <sub>
           <b>Pedro Cesar</b>
         </sub>
@@ -103,7 +103,6 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
     </td>
   </tr>
 </table>
-
 
 ## 📝 Licença
 
