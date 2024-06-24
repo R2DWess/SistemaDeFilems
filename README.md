@@ -87,7 +87,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
     </td>
     <td align="center">
       <a href="https://www.linkedin.com/in/pdr-hp2004/" title="Pedro Henrique">
-        <img src="https://media.licdn.com/dms/image/D4D03AQEaYTyYetINkQ/profile-displayphoto-shrink_800_800/0/1685739079307?e=1721865600&v=beta&t=eRedKXode-PexxMiM_nsKYHx1PPr5VvVu5ccmDPTA98" width="100px;" alt="Pedro Henrique"/><br>
+        <img src="https://media.licdn.com/dms/image/D4D03AQH7rYidN0ZT2A/profile-displayphoto-shrink_400_400/0/1719158834113?e=1724889600&v=beta&t=o7--j0xMYu8th4CCvUREXHAycskSw0dTceiyhGQ7f-g" width="100px;" alt="Pedro Henrique"/><br>
         <sub>
           <b>Pedro Henrique</b>
         </sub>
