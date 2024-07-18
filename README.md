@@ -1,128 +1,65 @@
 ## 📋 Proposta da Aplicação
 
-Nossa aplicação tem como propósito ser um sistema de gerenciamento de pacientes e médicos, onde os usuários poderão cadastrar, listar, atualizar e remover pacientes e médicos, bem como buscar informações detalhadas sobre eles.
-
+Nossa aplicação tem como propósito ser um sistema de Streaming de Filmes, onde o usuário poderá se cadastrar, logar, listar filmes, buscar filmes, favoritar filmes, adicionar filmes à sua lista e assistir a um filme.
 ## 🚀 Como Executar a Aplicação
 
-### ⚙️ Pré-requisitos
+### Pré-requisitos
 
 - Java 17+
 - Maven
 - MySQL
 
+## PROJETO DE ORIENTAÇÃO A OBJETOS - Universidade Católica de Brasília:
 
 1\. **Clone o Repositório:**
-```sh\
-git clone https://github.com/seuusuario/MedSystem
-```
+sh\
+https://github.com/R2DWess/SistemaDeFilmes
+
 
 2\. **Configure o Banco de Dados:**
 
 Acesse o MySQL:
-```cmd
-mysql -u root -p 
-```
+cmd
+mysql -u root -p
+
 ## 🗂️ Script do Banco de Dados
 
 O script SQL para criar o banco de dados e as tabelas necessárias está incluído na seção de configuração do banco de dados:
 
-**CRIAR SCHEMA MED**
-```mysql
-CREATE DATABASE Med;
-```
-**DEFINIR SCHAMA QUE SERÁ USADO**
-```MYSQL
-USE Med;
-```
-**CRIAR TABELA PACIENTES**
-```MYSQL
-CREATE TABLE pacientes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    cpf VARCHAR(14) NOT NULL,
-    telefone VARCHAR(20) NOT NULL,
-    ativo BIT NOT NULL,
-    logradouro VARCHAR(255),
-    bairro VARCHAR(255),
-    cep VARCHAR(10),
-    cidade VARCHAR(255),
-    estado VARCHAR(255),
-    rua VARCHAR(255),
-    uf VARCHAR(2),
-    complemento VARCHAR(255),
-    numero VARCHAR(10)
-);
-```
-**CRIAR TABELA MEDICOS**
-```mysql
-CREATE TABLE medicos (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    crm VARCHAR(20) NOT NULL,
-    telefone VARCHAR(20) NOT NULL,
-    especialidade VARCHAR(255) NOT NULL,
-    ativo BIT NOT NULL,
-    logradouro VARCHAR(255),
-    bairro VARCHAR(255),
-    cep VARCHAR(10),
-    cidade VARCHAR(255),
-    estado VARCHAR(255),
-    rua VARCHAR(255),
-    uf VARCHAR(2),
-    complemento VARCHAR(255),
-    numero VARCHAR(10)
-);
-```
+mysql
+CREATE DATABASE systemmovies;
+USE systemmovies;
 
-**Execute a Aplicação:**
-```cmd
+
+Execute a Aplicação:
+cmd
 java -Dexec.mainClass="org.example.ApplicationSystemStream"
-```
+
 
 ## 📋 Funcionalidades da aplicação
 
-**🤒 PACIENTES**
-- Cadastrar Paciente:
-  - **nome:** String
-  - **email:** String
-  - **telefone:** String
-  - **cpf:** String
-  - **endereco:** 
-    - **logradouro:** String
-    - **bairro:** String
-    - **cep:** String
-    - **cidade:** String
-    - **estado:** String
-    - **rua:** String
-    - **uf:** String
-    - **complemento:** String
-    - **numero:** String
-- Listar Pacientes: Os usuários podem visualizar uma lista de pacientes cadastrados.
-- Atualizar Paciente: Os usuários podem atualizar as informações de um paciente existente.
-- Remover Paciente: Os usuários podem inativar um paciente.
+- Tela de Cadastro
+  - **fullname:** InsertfullnameUser
+  - **socialname:** InsertsocialnameUser
+  - **Email:** InsertEmailUser
+  - **Password:** InsertPasswordUser
+  - **RG:** InsertRGUser
+  - **CPF:** InsertCPFUser
+  - **birthdate:** InsertbirthdateUser
+  - **Telefone:** InsertTelefoneUser
+  - **isAdmin:** InsertisAdminUser
 
-**🧑‍⚕️ MÉDICOS**
-- Cadastrar Médicos:
-- nome: String
-- email: String
-- crm: String
-- telefone: String
-- especialidade: String
-- endereco:
-  - logradouro: String
-  - bairro: String
-  - cep: String
-  - cidade: String
-  - estado: String
-  - rua: String
-  - uf: String
-  - complemento: String
-  - numero: String
-- Listar Médicos: Os usuários podem visualizar uma lista de médicos cadastrados.
-- Atualizar Médico: Os usuários podem atualizar as informações de um médico existente.
-- Remover Médico: Os usuários podem inativar um médico.
+- Tela de Login
+  **Email:** InsertEmailUser
+  **Password:** InsertPasswordUser
+
+- Tela de Filmes
+  - 📜 **Listar Filmes:** Os usuários podem visualizar uma lista de filmes disponíveis.
+  - 🔎 **Buscar Filmes:** Os usuários podem buscar filmes pelo título.
+  - ⭐ **Favoritar Filmes:** Os usuários podem adicionar filmes à sua lista de favoritos.
+  - ✅ **Adicionar Filmes à Lista:** Os usuários podem adicionar filmes à sua lista de interesse.
+  - 🎥 **Assistir Filmes:** Os usuários podem assistir aos filmes disponíveis na plataforma.
+
 
 ## 🔧 Tecnologias Utilizadas
 - Java
@@ -132,11 +69,11 @@ java -Dexec.mainClass="org.example.ApplicationSystemStream"
 - JUnit
 - Git
 - GitHub
-- IntelliJ Community IDEA
+- IntelliJ IDEA
 
-## 🤝 Desenvolvedor
+## 🤝 Colaboradores
 
-Creditos ao desenvolvedor que contribuiu a execução desse projeto:
+Agradecemos às seguintes pessoas que contribuíram para este projeto:
 
 <table>
   <tr>
@@ -148,11 +85,25 @@ Creditos ao desenvolvedor que contribuiu a execução desse projeto:
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/pdr-hp2004/" title="Pedro Henrique">
+        <img src="https://media.licdn.com/dms/image/D4D03AQH7rYidN0ZT2A/profile-displayphoto-shrink_400_400/0/1719158834113?e=1724889600&v=beta&t=o7--j0xMYu8th4CCvUREXHAycskSw0dTceiyhGQ7f-g" width="100px;" alt="Pedro Henrique"/><br>
+        <sub>
+          <b>Pedro Henrique</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://www.linkedin.com/in/pedro-c%C3%A9sarr-2oo2/" title="Pedro Cesar">
+        <img src="https://media.licdn.com/dms/image/D4E03AQH7DooITDfsKQ/profile-displayphoto-shrink_400_400/0/1688525101280?e=1721865600&v=beta&t=tksNGtTdjl9WKAeYuDj4gZL0_GgSeEYhgdTpz1omEv4" width="100px;" alt="Foto do Pedro Cesar"/><br>
+        <sub>
+          <b>Pedro Cesar</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 
-
 ## 📝 Licença
 
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](https://github.com/R2DWess/GerenciamentoDeMedicos/blob/main/LICENSE) para mais detalhes.
-
+Esse projeto está sob licença. Veja o arquivo [LICENÇA](https://github.com/R2DWess/SistemaDeFilmes/blob/main/LICENSE) para mais detalhes.
