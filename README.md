@@ -79,7 +79,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
   <tr>
     <td align="center">
       <a href="https://www.linkedin.com/in/wesley-lima-244405251/" title="Wesley Lima">
-        <img src="https://media.licdn.com/dms/image/D4D03AQGnIzTyPW-ctw/profile-displayphoto-shrink_800_800/0/1718908709929?e=1724284800&v=beta&t=Cnilj9FRnljF4pW7s_gzoXJlAbVOBGz96o-1YJ29pOw" width="100px;" alt="Foto do Wesley Lima"/><br>
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQEVAsL2UL6A0w/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1721323972268?e=1729728000&v=beta&t=TguSE9Dw8QDOAujT6SU4c_1E3iIMqlFaN9oLsLr5Fys" width="100px;" alt="Foto do Wesley Lima"/><br>
         <sub>
           <b>Wesley Lima</b>
         </sub>
