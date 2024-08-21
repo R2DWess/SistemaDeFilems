@@ -95,7 +95,7 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
     </td>
     <td align="center">
       <a href="https://www.linkedin.com/in/pedro-c%C3%A9sarr-2oo2/" title="Pedro Cesar">
-        <img src="https://media.licdn.com/dms/image/D4E03AQH7DooITDfsKQ/profile-displayphoto-shrink_400_400/0/1688525101280?e=1721865600&v=beta&t=tksNGtTdjl9WKAeYuDj4gZL0_GgSeEYhgdTpz1omEv4" width="100px;" alt="Foto do Pedro Cesar"/><br>
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQG1wQqvCZyhJQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1723659308461?e=1729728000&v=beta&t=3068K9HTQAZ0I8uFXYS7DCahJ7SVOQ7wEAT-AGwHtBg" width="100px;" alt="Foto do Pedro Cesar"/><br>
         <sub>
           <b>Pedro Cesar</b>
         </sub>
